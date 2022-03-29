@@ -57,7 +57,15 @@ public class Board {
 		int count = 0;
 		for (int i = 0; i < board.length; i++) {
 			if (!Objects.equals(board[i], correct_board[i]) && board[i] != 0) {
-				count++;
+				// Idee wäre Position in der Matrix von falsche und richtige Zahl finden.
+				// Man kann dann die Positionen subtrahieren und auf die Distanz kommen.
+				// Bsp.: Index 5 hat die Position 1,2 (Reihe, Spalte)  (5 % 3 = 1 Rest 2)
+				// 0, 1, 2
+				// 3, 4, 5
+				// 6, 7, 8
+				int index_wrong = i;
+				int index_correct = ArrayUtils.indexOf(correct_board, board[index_wrong]);
+
 			}
 		}
 		return -1;
