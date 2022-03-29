@@ -9,6 +9,7 @@ public class Puzzle8 {
 	public static void main(String[] args) {
 		Board b = new Board(); // Loesbares Puzzle b zufällig genrieren.
 		System.out.println(b);
+		System.out.println(b.heuristic1());
 
 		Deque<Board> res = A_Star.aStar(b);
 		int n = res == null ? -1 : res.size();
@@ -17,5 +18,6 @@ public class Puzzle8 {
 		res = IDFS.idfs(b);
 		n = res == null ? -1 : res.size();
 		System.out.println("Anz.Zuege: " + n + ": " + res);
+
 	}
 }

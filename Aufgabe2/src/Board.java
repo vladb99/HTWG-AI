@@ -1,6 +1,4 @@
-import java.util.Arrays;
-import java.util.List;
-import java.util.LinkedList;
+import java.util.*;
 
 /**
  * Klasse Board für 8-Puzzle-Problem
@@ -18,25 +16,51 @@ public class Board {
 	 * Gefüllt mit einer Permutation von 0,1,2, ..., 8.
 	 * 0 bedeutet leeres Feld.
 	 */
-	protected int[] board = new int[N+1];
+	protected Integer[] board = new Integer[N+1];
+
+	public Integer[] correct_board = {0, 1, 2, 3, 4, 5, 6, 7, 8};
 
 	/**
 	 * Generiert ein zufälliges Board.
 	 */
 	public Board() {
+		Integer[] intArray = {0, 1, 2, 3, 4, 5, 6, 7, 8};
+		List<Integer> intList = Arrays.asList(intArray);
+		Collections.shuffle(intList);
+		board = intList.toArray(intArray);
 	}
 	
 	/**
 	 * Generiert ein Board und initialisiert es mit board.
 	 * @param board Feld gefüllt mit einer Permutation von 0,1,2, ..., 8.
 	 */
-	public Board(int[] board) {
-		
+	public Board(Integer[] board) {
+		this.board = board;
 	}
 
 	@Override
 	public String toString() {
 		return "Puzzle{" + "board=" + Arrays.toString(board) + '}';
+	}
+
+	public int heuristic1() {
+		int count = 0;
+		for (int i = 0; i < board.length; i++) {
+			if (!Objects.equals(board[i], correct_board[i]) && board[i] != 0) {
+				count++;
+			}
+		}
+		return count;
+	}
+
+	public int heuristic2() {
+		int count = 0;
+		for (int i = 0; i < board.length; i++) {
+			if (!Objects.equals(board[i], correct_board[i]) && board[i] != 0) {
+				count++;
+			}
+		}
+		return -1;
 	}
 
 
@@ -107,8 +131,8 @@ public class Board {
 	
 	
 	public static void main(String[] args) {
-		Board b = new Board(new int[]{7,2,4,5,0,6,8,3,1});		// abc aus Aufgabenblatt
-		Board goal = new Board(new int[]{0,1,2,3,4,5,6,7,8});
+		Board b = new Board(new Integer[]{7,2,4,5,0,6,8,3,1});		// abc aus Aufgabenblatt
+		Board goal = new Board(new Integer[]{0,1,2,3,4,5,6,7,8});
 				
 		System.out.println(b);
 		System.out.println(b.parity());
