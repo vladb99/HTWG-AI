@@ -43,42 +43,6 @@ public class Board {
         return "Puzzle{" + "board=" + Arrays.toString(board) + '}';
     }
 
-    public int heuristic1() {
-        int count = 0;
-		// Index i ist die korrekte Position
-        for (int i = 0; i < board.length; i++) {
-            if (!Objects.equals(board[i], i) && board[i] != 0) {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public int heuristic2() {
-        int count = 0;
-        for (int i = 0; i < board.length; i++) {
-            if (!Objects.equals(board[i], i) && board[i] != 0) {
-                // Idee wäre Position in der Matrix von falsche und richtige Zahl finden.
-                // Man kann dann die Positionen subtrahieren und auf die Distanz kommen.
-                // Bsp.: Index 5 hat die Position 1,2 (Reihe, Spalte)  (5 % 3 = 1 Rest 2)
-                // 0, 1, 2
-                // 3, 4, 5
-                // 6, 7, 8
-                int wrong_index = i;
-				int correct_index = board[i];
-
-				int row1 = wrong_index / 3;
-				int column1 = wrong_index % 3;
-
-				int row2 = correct_index / 3;
-				int column2 = correct_index % 3;
-
-				count += Math.abs(row1 - row2) + Math.abs(column1 - column2);
-            }
-        }
-        return count;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -101,6 +65,29 @@ public class Board {
         return hash;
     }
 
+    public int calculate_parity() {
+        int count = 0;
+        for (int i = 0; i < board.length; i++) {
+            if (i == board.length - 1) {
+                break;
+            }
+            int left = board[i];
+            if (left == 0) {
+                continue;
+            }
+            for (int j = i + 1; j < board.length; j++) {
+                int right = board[j];
+                if (right == 0) {
+                    continue;
+                }
+                if (left > right) {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
     /**
      * Paritätsprüfung.
      *
@@ -116,7 +103,14 @@ public class Board {
      * @return Heuristikwert.
      */
     public int h1() {
-        return 0;
+        int count = 0;
+        // Index i ist die korrekte Position
+        for (int i = 0; i < board.length; i++) {
+            if (!Objects.equals(board[i], i) && board[i] != 0) {
+                count++;
+            }
+        }
+        return count;
     }
 
     /**
@@ -125,7 +119,28 @@ public class Board {
      * @return Heuristikwert.
      */
     public int h2() {
-        return 0;
+        int count = 0;
+        for (int i = 0; i < board.length; i++) {
+            if (!Objects.equals(board[i], i) && board[i] != 0) {
+                // Idee wäre Position in der Matrix von falsche und richtige Zahl finden.
+                // Man kann dann die Positionen subtrahieren und auf die Distanz kommen.
+                // Bsp.: Index 5 hat die Position 1,2 (Reihe, Spalte)  (5 % 3 = 1 Rest 2)
+                // 0, 1, 2
+                // 3, 4, 5
+                // 6, 7, 8
+                int wrong_index = i;
+                int correct_index = board[i];
+
+                int row1 = wrong_index / 3;
+                int column1 = wrong_index % 3;
+
+                int row2 = correct_index / 3;
+                int column2 = correct_index % 3;
+
+                count += Math.abs(row1 - row2) + Math.abs(column1 - column2);
+            }
+        }
+        return count;
     }
 
     /**
@@ -156,6 +171,7 @@ public class Board {
 
         System.out.println(b);
         System.out.println(b.parity());
+        System.out.println(b.calculate_parity());
         System.out.println(b.h1());
         System.out.println(b.h2());
 
