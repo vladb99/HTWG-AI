@@ -10,6 +10,7 @@ public class Puzzle8 {
 		Board b = new Board(); // Loesbares Puzzle b zufällig genrieren.
 		System.out.println(b);
 		System.out.println(b.heuristic1());
+		System.out.println(b.heuristic2());
 
 		Deque<Board> res = A_Star.aStar(b);
 		int n = res == null ? -1 : res.size();
