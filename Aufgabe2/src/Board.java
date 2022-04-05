@@ -202,7 +202,7 @@ public class Board {
         Board goal = new Board(new Integer[]{1, 0, 2, 3, 4, 5, 6, 7, 8});
 
         Deque<Board> path = IDFS.idfs(b);
-        for (Board board: path) {
+        for (Board board : path) {
             System.out.println(board);
         }
 
