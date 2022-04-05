@@ -93,8 +93,8 @@ public class Board {
      *
      * @return Parität.
      */
-    public boolean parity() {
-        return true;
+    public boolean parity(Board board) {
+        return board.calculate_parity() % 2 == calculate_parity() % 2;
     }
 
     /**
@@ -125,8 +125,8 @@ public class Board {
                 // Idee wäre Position in der Matrix von falsche und richtige Zahl finden.
                 // Man kann dann die Positionen subtrahieren und auf die Distanz kommen.
                 // Bsp.: Index 5 hat die Position 1,2 (Reihe, Spalte)  (5 % 3 = 1 Rest 2)
-                // 0, 1, 2
-                // 3, 4, 5
+                // 4, 1, 5
+                // 3, 0, 2
                 // 6, 7, 8
                 int wrong_index = i;
                 int correct_index = board[i];
@@ -150,8 +150,40 @@ public class Board {
      */
     public List<Board> possibleActions() {
         List<Board> boardList = new LinkedList<>();
-        // ...
+
+        for (int i = 0; i < board.length; i++) {
+            if (Objects.equals(board[i], 0)) {
+                int row = i / 3;
+                int column = i % 3;
+
+                int up = row - 1;
+                int down = row + 1;
+                int left = column - 1;
+                int right = column + 1;
+
+                if (up >= 0) {
+                    boardList.add(switchPosition(board, i, i - 3));
+                }
+                if (down <= 2) {
+                    boardList.add(switchPosition(board, i, i + 3));
+                }
+                if (left >= 0) {
+                    boardList.add(switchPosition(board, i, i - 1));
+                }
+                if (right <= 2) {
+                    boardList.add(switchPosition(board, i, i + 1));
+                }
+            }
+        }
         return boardList;
+    }
+
+    private Board switchPosition(Integer[] board, int from, int to) {
+        Integer[] clone = Arrays.copyOf(board, board.length);
+        int tmp = clone[from];
+        clone[from] = clone[to];
+        clone[to] = tmp;
+        return new Board(clone);
     }
 
 
@@ -161,24 +193,32 @@ public class Board {
      * @return true, falls Board Ziestzustand (d.h. 0,1,2,3,4,5,6,7,8)
      */
     public boolean isSolved() {
-        return true;
+        return Arrays.equals(board, new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8});
     }
 
 
     public static void main(String[] args) {
         Board b = new Board(new Integer[]{7, 2, 4, 5, 0, 6, 8, 3, 1});        // abc aus Aufgabenblatt
-        Board goal = new Board(new Integer[]{0, 1, 2, 3, 4, 5, 6, 7, 8});
+        Board goal = new Board(new Integer[]{1, 0, 2, 3, 4, 5, 6, 7, 8});
 
-        System.out.println(b);
-        System.out.println(b.parity());
-        System.out.println(b.calculate_parity());
-        System.out.println(b.h1());
-        System.out.println(b.h2());
+        Deque<Board> path = IDFS.idfs(b);
+        for (Board board: path) {
+            System.out.println(board);
+        }
 
-        for (Board child : b.possibleActions())
-            System.out.println(child);
-
-        System.out.println(goal.isSolved());
+//        System.out.println(b);
+//        System.out.println(b.parity(goal));
+//        System.out.println(b.calculate_parity());
+//        System.out.println(b.h1());
+//        System.out.println(b.h2());
+//        System.out.println(b.isSolved());
+//
+//        System.out.println(goal.possibleActions());
+//
+//        for (Board child : b.possibleActions())
+//            System.out.println(child);
+//
+//        System.out.println(goal.isSolved());
     }
 }
-	
+
