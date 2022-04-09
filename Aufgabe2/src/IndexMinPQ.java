@@ -172,6 +172,7 @@ public class IndexMinPQ<Key, PrioValue> {
 			prioPos.get(heap[0]).pos = 0; 
 			downheap(0);
 		}
+		prioPos.remove(k);
 		return k;
 	}
 	

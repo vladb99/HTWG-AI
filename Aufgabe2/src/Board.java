@@ -27,6 +27,11 @@ public class Board {
         List<Integer> intList = Arrays.asList(intArray);
         Collections.shuffle(intList);
         board = intList.toArray(intArray);
+
+        while (calculate_parity() % 2 != 0) {
+            Collections.shuffle(intList);
+            board = intList.toArray(intArray);
+        }
     }
 
     /**
