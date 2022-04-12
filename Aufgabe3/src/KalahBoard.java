@@ -392,5 +392,24 @@ public class KalahBoard {
 				return false;
 		}
 	}
+
+	public int maxAction() {
+		return minValue(board);
+	}
+
+	public int maxValue(int[] board) {
+		return -1;
+	}
+
+	public int minValue(int[] board) {
+		if (finished) {
+
+		}
+		return -1;
+	}
+
+	public int evaluateSituation() {
+		return -1;
+	}
 }
 	
