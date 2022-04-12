@@ -14,25 +14,8 @@ public class A_Star {
     private static HashMap<Board, Board> pred = new HashMap<>();
 
     // openList als Prioritätsliste.
-    // Die Prioritätswerte sind die geschätzen Kosten f = g + h (s. Skript S. 2-66) (g = aktuelle kosten, h = kosten von heuristik)
+    // Die Prioritätswerte sind die geschätzen Kosten f(n) = g(n) + h(n) (s. Skript S. 2-66) (g = aktuelle kosten, h = kosten von heuristik)
     private static IndexMinPQ<Board, Integer> openList = new IndexMinPQ<>();
-/*
-    c) Bestimmen Sie die Anzahl der vom Suchverfahren generierten Zustände und die Länge der
-    Lösungsfolge für verschiedene Startzustände.
-    ?????
-
-    d) Sind Ihre Zugfolgen optimal? Wenn ja, warum?
-    IDFS:
-    Da jede Aktion der gleiche positive Kosten hat und der Algorithmus immer Ebenenweise sucht, wird die schnellsmögliche Lösung gefunden.
-
-    A*:
-    Da immer verglichen wird ob es zu einem Knoten einen günsitgeren Weg gibt, wird schlussendlich der beste Weg zurückgegeben mit den kleinsten Kosten.
-
-    e) Welches Problem könnte entstehen (nicht ausprobieren!), falls A* für die Lösung des 15-
-    Puzzle eingesetzt werden würde?
-    Speicherprobleme
-
-*/
 
     public static Deque<Board> aStar(Board startBoard) {
         cost.clear();

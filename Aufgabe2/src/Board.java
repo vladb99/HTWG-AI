@@ -28,7 +28,7 @@ public class Board {
         Collections.shuffle(intList);
         board = intList.toArray(intArray);
 
-        while (calculate_parity() % 2 != 0) {
+        while (calculate_Parity() % 2 != 0) {
             Collections.shuffle(intList);
             board = intList.toArray(intArray);
         }
@@ -70,13 +70,19 @@ public class Board {
         return hash;
     }
 
-    public int calculate_parity() {
+    /**
+     * Parität berechnen. Indem über das Board doppelt iteriert wird und geschaut wird ob der Linke
+     * Stein größer ist als der Rechte.
+     * @return Paritätszahl des Boardes.
+     */
+    public int calculate_Parity() {
         int count = 0;
         for (int i = 0; i < board.length; i++) {
             if (i == board.length - 1) {
                 break;
             }
             int left = board[i];
+            // Null wird jeweils übersprungen, da sie für die Zählung nicht relevant ist
             if (left == 0) {
                 continue;
             }
@@ -99,7 +105,7 @@ public class Board {
      * @return Parität.
      */
     public boolean parity(Board board) {
-        return board.calculate_parity() % 2 == calculate_parity() % 2;
+        return board.calculate_Parity() % 2 == calculate_Parity() % 2;
     }
 
     /**
@@ -166,6 +172,7 @@ public class Board {
                 int left = column - 1;
                 int right = column + 1;
 
+                // Hier wird geschaut wo sich der Stein befindet und anhand davon können wir die Möglichkeiten abzählen
                 if (up >= 0) {
                     boardList.add(switchPosition(board, i, i - 3));
                 }
@@ -183,6 +190,8 @@ public class Board {
         return boardList;
     }
 
+    // https://stackoverflow.com/questions/13766209/efficient-swapping-of-elements-of-an-array-in-java
+    // From Stackoverflow how to swap elements efficiently
     private Board switchPosition(Integer[] board, int from, int to) {
         Integer[] clone = Arrays.copyOf(board, board.length);
         int tmp = clone[from];
@@ -213,7 +222,7 @@ public class Board {
 
 //        System.out.println(b);
 //        System.out.println(b.parity(goal));
-//        System.out.println(b.calculate_parity());
+//        System.out.println(b.calculate_Parity());
 //        System.out.println(b.h1());
 //        System.out.println(b.h2());
 //        System.out.println(b.isSolved());
