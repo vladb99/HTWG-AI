@@ -6,21 +6,16 @@ import java.util.*;
  * @author Ihr Name
  */
 public class IDFS {
-    // s. Skript 2-51
+
     private static Deque<Board> dfs(Board curBoard, Deque<Board> path, int limit) {
-        // Wir bekommen alle möglichen Actions für das aktuelle Board
         List<Board> actions = curBoard.possibleActions();
-        // Wenn das Board gelöst ist können wir den Path zurückgeben
         if (curBoard.isSolved()) {
             return path;
         } else if (limit == 0) { // Maximal zulässige Rekursionstiefe erreicht
             return null;
         } else {
-            // Wenn nicht müssen wir weiterlaufen
             boolean cutOffOccured = false;
             for (Board child : actions) {
-                // Wenn der Path ein Child besitzt, wird dieses zum Path geadded
-                // Wenn der rekursive Aufruf für dieses Kind null ist wird der Teil des Weges abgekappt
                 if (path.contains(child)) {
                     continue;
                 }
@@ -32,7 +27,7 @@ public class IDFS {
                 } else {
                     cutOffOccured = true;
                 }
-                // Für den Backtrack-Schritt wird der letzte Knoten immer entfernt
+
                 path.removeLast();
             }
             if (cutOffOccured) {

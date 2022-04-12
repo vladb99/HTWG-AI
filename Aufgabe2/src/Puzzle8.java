@@ -8,10 +8,10 @@ import java.util.Deque;
 public class Puzzle8 {
 
     public static void main(String[] args) {
+        // Aufgabe b
         for (int i = 0; i < 10; i++) {
             Board b = new Board();
             System.out.println(b);
-
             System.out.println(b.h1());
             System.out.println(b.h2());
 
