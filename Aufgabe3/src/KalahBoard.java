@@ -393,23 +393,129 @@ public class KalahBoard {
 		}
 	}
 
-	public int maxAction() {
-		return minValue(board);
+	public KalahBoard maxAction(boolean isPlayerA, int limit) {
+		return minValue(this, isPlayerA, limit);
 	}
 
-	public int maxValue(int[] board) {
-		return -1;
-	}
-
-	public int minValue(int[] board) {
-		if (finished) {
-
+	public KalahBoard maxValue(KalahBoard board, boolean isPlayerA, int limit) {
+		if (board.finished || limit == 0) {
+			return board;
 		}
-		return -1;
+		int value = Integer.MIN_VALUE;
+		KalahBoard bestAction = null;
+		List<KalahBoard> actions = board.possibleActions();
+		for (KalahBoard action: actions) {
+			int newLimit = limit - 1;
+			int newValue = minValue(action, !isPlayerA, newLimit).evaluateSituation(!isPlayerA);
+			if (newValue >= value) {
+				value = newValue;
+				bestAction = action;
+			}
+		}
+		return bestAction;
 	}
 
-	public int evaluateSituation() {
-		return -1;
+	public KalahBoard minValue(KalahBoard board, boolean isPlayerA, int limit) {
+		if (board.finished || limit == 0) {
+			return board;
+		}
+		int value = Integer.MAX_VALUE;
+		KalahBoard bestAction = null;
+		List<KalahBoard> actions = board.possibleActions();
+		for (KalahBoard action: actions) {
+			int newLimit = limit - 1;
+			int newValue = maxValue(action, !isPlayerA, newLimit).evaluateSituation(!isPlayerA);
+			if (newValue <= value) {
+				value = newValue;
+				bestAction = action;
+			}
+		}
+		return bestAction;
+	}
+
+
+	public KalahBoard AlphaBetaSearch(boolean isPlayerA, int limit) {
+		return maxValue(this, isPlayerA, limit, Integer.MIN_VALUE, Integer.MAX_VALUE);
+	}
+	public KalahBoard maxValue(KalahBoard board, boolean isPlayerA, int limit, int alpha, int beta) {
+		if (board.finished || limit == 0) {
+			return board;
+		}
+		int value = Integer.MIN_VALUE;
+		KalahBoard bestAction = null;
+		List<KalahBoard> actions = board.possibleActions();
+		for (KalahBoard action: actions) {
+			int newLimit = limit - 1;
+			int newValue = minValue(action, !isPlayerA, newLimit).evaluateSituation(!isPlayerA);
+			if (newValue >= value) {
+				value = newValue;
+				bestAction = action;
+			}
+			// TODO anpassen mit Marco Code
+			//if (value >= beta) {
+			//	return value; // Beta-Cutoff
+			//}
+			//alpha = Math.max(alpha, value);
+		}
+		return bestAction;
+	}
+
+	public KalahBoard minValue(KalahBoard board, boolean isPlayerA, int limit) {
+		if (board.finished || limit == 0) {
+			return board;
+		}
+		int value = Integer.MAX_VALUE;
+		KalahBoard bestAction = null;
+		List<KalahBoard> actions = board.possibleActions();
+		for (KalahBoard action: actions) {
+			int newLimit = limit - 1;
+			int newValue = maxValue(action, !isPlayerA, newLimit).evaluateSituation(!isPlayerA);
+			if (newValue <= value) {
+				value = newValue;
+				bestAction = action;
+			}
+		}
+		return bestAction;
+	}
+	/*
+	public int MaxValue(KalahBoard board, int alpha, int beta) {
+		if (board.isFinished()) {
+			return board
+		}
+		int value = Integer.MIN_VALUE;
+		for (KalahBoard action: actions) {
+			value = Math.max(value, MinValue(action, alpha, beta));
+			if (value >= beta) {
+				return value; // Beta-Cutoff
+			}
+			alpha = Math.max(alpha, value);
+		}
+		return value;
+	}
+
+	public int MinValue(KalahBoard board, int alpha, int beta) {
+		if (board.isFinished()) {
+			return board
+		}
+		int value = Integer.MAX_VALUE;
+		for (KalahBoard action: actions) {
+			value = Math.min(value, MaxValue(action, alpha, beta));
+			if (value <= alpha) {
+				return value; // Alpha-Cutoff
+			}
+			beta = Math.min(beta, value);
+		}
+		return value;
+	}
+
+	*/
+
+	public int evaluateSituation(boolean isPlayerA) {
+		if (isPlayerA) {
+			return getAKalah() - getBKalah();
+		} else {
+			return getBKalah() - getAKalah();
+		}
 	}
 }
 	

@@ -40,6 +40,9 @@ public class Kalah {
 		kalahBd.print();
 
 		while (!kalahBd.isFinished()) {
+			KalahBoard botAction = kalahBd.maxAction(kalahBd.getCurPlayer() == KalahBoard.APlayer, 5);
+			botAction.print();
+			System.out.println(botAction.getLastPlay());
 			int action = kalahBd.readAction();
 			kalahBd.move(action);
 			kalahBd.print();
