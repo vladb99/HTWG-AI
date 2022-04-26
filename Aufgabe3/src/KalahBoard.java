@@ -1,7 +1,5 @@
-import java.util.Arrays;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Scanner;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Klasse KalahBoard 
@@ -53,6 +51,7 @@ public class KalahBoard {
 
 	public int countB = 0;
 	public int countC = 0;
+	public int countD = 0;
 	
 	/**
 	 *	Konstruktor.
@@ -479,6 +478,58 @@ public class KalahBoard {
 		for (KalahBoard action: actions) {
 			int newLimit = limit - 1;
 			int newValue = maxValue_c(action, !isPlayerA, newLimit, alpha, beta).evaluateSituation(!isPlayerA);
+			if (newValue <= value) {
+				value = newValue;
+				bestAction = action;
+			}
+
+			if (value <= alpha) {
+				return board; // Beta-Cutoff
+			}
+			beta = Math.min(beta, value);
+		}
+		return bestAction;
+	}
+
+	public KalahBoard maxAction_d(boolean isPlayerA, int limit) {
+		countD = 0;
+		return maxValue_d(this, isPlayerA, limit, Integer.MIN_VALUE, Integer.MAX_VALUE);
+	}
+	public KalahBoard maxValue_d(KalahBoard board, boolean isPlayerA, int limit, int alpha, int beta) {
+		countD++;
+		if (board.finished || limit == 0) {
+			return board;
+		}
+		int value = Integer.MIN_VALUE;
+		KalahBoard bestAction = null;
+		List<KalahBoard> actions = board.possibleActions().stream().sorted((o2, o1)-> Integer.valueOf(o1.evaluateSituation(!isPlayerA)).compareTo(Integer.valueOf(o2.evaluateSituation(!isPlayerA)))).collect(Collectors.toList());
+		for (KalahBoard action: actions) {
+			int newLimit = limit - 1;
+			int newValue = minValue_d(action, !isPlayerA, newLimit, alpha, beta).evaluateSituation(!isPlayerA);
+			if (newValue >= value) {
+				value = newValue;
+				bestAction = action;
+			}
+
+			if (value >= beta) {
+				return board; // Beta-Cutoff
+			}
+			alpha = Math.max(alpha, value);
+		}
+		return bestAction;
+	}
+
+	public KalahBoard minValue_d(KalahBoard board, boolean isPlayerA, int limit, int alpha, int beta) {
+		countD++;
+		if (board.finished || limit == 0) {
+			return board;
+		}
+		int value = Integer.MAX_VALUE;
+		KalahBoard bestAction = null;
+		List<KalahBoard> actions = board.possibleActions().stream().sorted((o1, o2)-> Integer.valueOf(o1.evaluateSituation(!isPlayerA)).compareTo(Integer.valueOf(o2.evaluateSituation(!isPlayerA)))).collect(Collectors.toList());
+		for (KalahBoard action: actions) {
+			int newLimit = limit - 1;
+			int newValue = maxValue_d(action, !isPlayerA, newLimit, alpha, beta).evaluateSituation(!isPlayerA);
 			if (newValue <= value) {
 				value = newValue;
 				bestAction = action;
