@@ -35,12 +35,15 @@ public class Kalah {
 	/**
 	 * Mensch gegen Mensch
 	 */
+	// B: 7170 6268 6445
+	// C: 2730 277 1589 292 4861 258
 	public static void testHHGame() {
 		KalahBoard kalahBd = new KalahBoard();
 		kalahBd.print();
 
 		while (!kalahBd.isFinished()) {
-			KalahBoard botAction = kalahBd.maxAction(kalahBd.getCurPlayer() == KalahBoard.APlayer, 5);
+			KalahBoard botAction = kalahBd.maxAction_c(kalahBd.getCurPlayer() == KalahBoard.APlayer, 5);
+			System.out.println("Count: " + kalahBd.countC);
 			botAction.print();
 			System.out.println(botAction.getLastPlay());
 			int action = kalahBd.readAction();

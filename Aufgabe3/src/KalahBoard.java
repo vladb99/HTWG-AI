@@ -50,6 +50,9 @@ public class KalahBoard {
 	// Konsolen-Ein/Ausgabe:
 	private static Scanner in = new Scanner(System.in);
 	private static final String ANSI_BLUE = "\u001B[34m";
+
+	public int countB = 0;
+	public int countC = 0;
 	
 	/**
 	 *	Konstruktor.
@@ -393,11 +396,13 @@ public class KalahBoard {
 		}
 	}
 
-	public KalahBoard maxAction(boolean isPlayerA, int limit) {
-		return minValue(this, isPlayerA, limit);
+	public KalahBoard maxAction_b(boolean isPlayerA, int limit) {
+		countB = 0;
+		return minValue_b(this, isPlayerA, limit);
 	}
 
-	public KalahBoard maxValue(KalahBoard board, boolean isPlayerA, int limit) {
+	public KalahBoard maxValue_b(KalahBoard board, boolean isPlayerA, int limit) {
+		countB++;
 		if (board.finished || limit == 0) {
 			return board;
 		}
@@ -406,7 +411,7 @@ public class KalahBoard {
 		List<KalahBoard> actions = board.possibleActions();
 		for (KalahBoard action: actions) {
 			int newLimit = limit - 1;
-			int newValue = minValue(action, !isPlayerA, newLimit).evaluateSituation(!isPlayerA);
+			int newValue = minValue_b(action, !isPlayerA, newLimit).evaluateSituation(!isPlayerA);
 			if (newValue >= value) {
 				value = newValue;
 				bestAction = action;
@@ -415,7 +420,8 @@ public class KalahBoard {
 		return bestAction;
 	}
 
-	public KalahBoard minValue(KalahBoard board, boolean isPlayerA, int limit) {
+	public KalahBoard minValue_b(KalahBoard board, boolean isPlayerA, int limit) {
+		countB++;
 		if (board.finished || limit == 0) {
 			return board;
 		}
@@ -424,7 +430,7 @@ public class KalahBoard {
 		List<KalahBoard> actions = board.possibleActions();
 		for (KalahBoard action: actions) {
 			int newLimit = limit - 1;
-			int newValue = maxValue(action, !isPlayerA, newLimit).evaluateSituation(!isPlayerA);
+			int newValue = maxValue_b(action, !isPlayerA, newLimit).evaluateSituation(!isPlayerA);
 			if (newValue <= value) {
 				value = newValue;
 				bestAction = action;
@@ -434,10 +440,12 @@ public class KalahBoard {
 	}
 
 
-	public KalahBoard AlphaBetaSearch(boolean isPlayerA, int limit) {
-		return maxValue(this, isPlayerA, limit, Integer.MIN_VALUE, Integer.MAX_VALUE);
+	public KalahBoard maxAction_c(boolean isPlayerA, int limit) {
+		countC = 0;
+		return maxValue_c(this, isPlayerA, limit, Integer.MIN_VALUE, Integer.MAX_VALUE);
 	}
-	public KalahBoard maxValue(KalahBoard board, boolean isPlayerA, int limit, int alpha, int beta) {
+	public KalahBoard maxValue_c(KalahBoard board, boolean isPlayerA, int limit, int alpha, int beta) {
+		countC++;
 		if (board.finished || limit == 0) {
 			return board;
 		}
@@ -446,69 +454,43 @@ public class KalahBoard {
 		List<KalahBoard> actions = board.possibleActions();
 		for (KalahBoard action: actions) {
 			int newLimit = limit - 1;
-			int newValue = minValue(action, !isPlayerA, newLimit).evaluateSituation(!isPlayerA);
+			int newValue = minValue_c(action, !isPlayerA, newLimit, alpha, beta).evaluateSituation(!isPlayerA);
 			if (newValue >= value) {
 				value = newValue;
 				bestAction = action;
 			}
-			// TODO anpassen mit Marco Code
-			//if (value >= beta) {
-			//	return value; // Beta-Cutoff
-			//}
-			//alpha = Math.max(alpha, value);
-		}
-		return bestAction;
-	}
 
-	public KalahBoard minValue(KalahBoard board, boolean isPlayerA, int limit) {
-		if (board.finished || limit == 0) {
-			return board;
-		}
-		int value = Integer.MAX_VALUE;
-		KalahBoard bestAction = null;
-		List<KalahBoard> actions = board.possibleActions();
-		for (KalahBoard action: actions) {
-			int newLimit = limit - 1;
-			int newValue = maxValue(action, !isPlayerA, newLimit).evaluateSituation(!isPlayerA);
-			if (newValue <= value) {
-				value = newValue;
-				bestAction = action;
-			}
-		}
-		return bestAction;
-	}
-	/*
-	public int MaxValue(KalahBoard board, int alpha, int beta) {
-		if (board.isFinished()) {
-			return board
-		}
-		int value = Integer.MIN_VALUE;
-		for (KalahBoard action: actions) {
-			value = Math.max(value, MinValue(action, alpha, beta));
 			if (value >= beta) {
-				return value; // Beta-Cutoff
+				return board; // Beta-Cutoff
 			}
 			alpha = Math.max(alpha, value);
 		}
-		return value;
+		return bestAction;
 	}
 
-	public int MinValue(KalahBoard board, int alpha, int beta) {
-		if (board.isFinished()) {
-			return board
+	public KalahBoard minValue_c(KalahBoard board, boolean isPlayerA, int limit, int alpha, int beta) {
+		countC++;
+		if (board.finished || limit == 0) {
+			return board;
 		}
 		int value = Integer.MAX_VALUE;
+		KalahBoard bestAction = null;
+		List<KalahBoard> actions = board.possibleActions();
 		for (KalahBoard action: actions) {
-			value = Math.min(value, MaxValue(action, alpha, beta));
+			int newLimit = limit - 1;
+			int newValue = maxValue_c(action, !isPlayerA, newLimit, alpha, beta).evaluateSituation(!isPlayerA);
+			if (newValue <= value) {
+				value = newValue;
+				bestAction = action;
+			}
+
 			if (value <= alpha) {
-				return value; // Alpha-Cutoff
+				return board; // Beta-Cutoff
 			}
 			beta = Math.min(beta, value);
 		}
-		return value;
+		return bestAction;
 	}
-
-	*/
 
 	public int evaluateSituation(boolean isPlayerA) {
 		if (isPlayerA) {
