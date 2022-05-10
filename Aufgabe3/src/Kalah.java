@@ -48,13 +48,17 @@ public class Kalah {
 		kalahBd.print();
 
 		while (!kalahBd.isFinished()) {
-			KalahBoard botAction = kalahBd.maxAction_d(kalahBd.getCurPlayer() == KalahBoard.APlayer, 5);
 			//System.out.println("Count: " + kalahBd.countD);
 			//botAction.print();
-			System.out.print("   " + botAction.getLastPlay());
-			//int action = kalahBd.readAction();
+			//System.out.print("   " + botAction.getLastPlay());
+			int action = kalahBd.readAction();
+			kalahBd.move(action);
+
+			KalahBoard botAction = kalahBd.maxAction_d(kalahBd.getCurPlayer() == KalahBoard.BPlayer, 5);
+			System.out.println(botAction.getLastPlay());
 			kalahBd.move(botAction.getLastPlay());
-			//kalahBd.print();
+
+			kalahBd.print();
 		}
 		kalahBd.print();
 		System.out.println("\n" + ANSI_BLUE + "GAME OVER");
